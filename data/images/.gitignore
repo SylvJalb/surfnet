@@ -2,6 +2,3 @@
 *
 # Except this files
 !.gitignore
-!all_image_urls.csv
-!annotations_unofficial.json
-!annotations.json

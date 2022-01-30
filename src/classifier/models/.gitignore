@@ -3,3 +3,4 @@
 # Except this file
 !.gitignore
 !download_pretrained_base.sh
+!trained_classifier.h5

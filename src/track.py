@@ -113,7 +113,7 @@ def associate_detections_to_trackers(detections_for_frame, trackers, flow01):
 
     return assigned_trackers
     
-def track_video(reader, detections, args, engine, transition_variance, observation_variance):
+def track_video(reader, detections, downsampling_factor, engine, transition_variance, observation_variance, display):
     init = False
     trackers = dict()
     frame_nb = 0
@@ -125,7 +125,7 @@ def track_video(reader, detections, args, engine, transition_variance, observati
 
     if display.on: 
     
-        display.display_shape = (reader.output_shape[0] // args.downsampling_factor, reader.output_shape[1] // args.downsampling_factor)
+        display.display_shape = (reader.output_shape[0] // downsampling_factor, reader.output_shape[1] // downsampling_factor)
         display.update_detections_and_frame(detections_for_frame, frame0)
 
     if len(detections_for_frame):
@@ -146,7 +146,7 @@ def track_video(reader, detections, args, engine, transition_variance, observati
         else:
 
             new_trackers = []
-            flow01 = compute_flow(frame0, frame1, args.downsampling_factor)
+            flow01 = compute_flow(frame0, frame1, downsampling_factor)
 
             if len(detections_for_frame):
 
@@ -221,7 +221,7 @@ def main(args):
         detections = get_detections_for_video(reader, detector, batch_size=args.detection_batch_size, device=device)
 
         print('Tracking...')
-        results = track_video(reader, iter(detections), args, engine, transition_variance, observation_variance)
+        results = track_video(reader, iter(detections), args.downsampling_factor, engine, transition_variance, observation_variance, display)
 
         output_filename = os.path.join(args.output_dir, video_filename.split('.')[0] +'.txt')
         write_tracking_results_to_file(results, ratio_x=ratio_x, ratio_y=ratio_y, output_filename=output_filename)

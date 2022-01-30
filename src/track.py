@@ -113,7 +113,7 @@ def associate_detections_to_trackers(detections_for_frame, trackers, flow01):
 
     return assigned_trackers
     
-def track_video(reader, detections, downsampling_factor, engine, transition_variance, observation_variance, display):
+def track_video(reader, detections, downsampling_factor, engine, transition_variance, observation_variance):
     init = False
     trackers = dict()
     frame_nb = 0
@@ -221,7 +221,7 @@ def main(args):
         detections = get_detections_for_video(reader, detector, batch_size=args.detection_batch_size, device=device)
 
         print('Tracking...')
-        results = track_video(reader, iter(detections), args.downsampling_factor, engine, transition_variance, observation_variance, display)
+        results = track_video(reader, iter(detections), args.downsampling_factor, engine, transition_variance, observation_variance)
 
         output_filename = os.path.join(args.output_dir, video_filename.split('.')[0] +'.txt')
         write_tracking_results_to_file(results, ratio_x=ratio_x, ratio_y=ratio_y, output_filename=output_filename)
